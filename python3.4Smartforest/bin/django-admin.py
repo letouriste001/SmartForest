@@ -1,0 +1,1 @@
+#!/home/christophe/PycharmProjects/SmartForest_2.0/python3.4Smartforest/bin/python3.4from django.core import managementif __name__ == "__main__":    management.execute_from_command_line()

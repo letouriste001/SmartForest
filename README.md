@@ -1,2 +1,1 @@
-# SmartForest
-Projet de forêt connecté opensource
+# SmartForestProjet de forêt connecté opensource

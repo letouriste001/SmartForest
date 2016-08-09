@@ -65,6 +65,9 @@ class DHT22:
             self.temperature = self._convertBit(start=16, range=15)
             if (negativeTemp):
                 self.temperature = self.temperature * -1
+
+        self.pin = pyb.Pin(self.pinName, pyb.Pin.OUT_PP)
+        self.pin.high()
     
     def _convertBit(self, start, range):
         tmp = self._byteDataToString(start=start, range=range)

@@ -44,6 +44,6 @@ blueled.on()
 #print('')
 #
 ## Main script to run after this one
-pyb.main('main.py')
+pyb.main('mainTest.py')
 #pyb.main('test.py')
 #pyb.main('none.py')

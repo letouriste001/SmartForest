@@ -19,10 +19,10 @@ class DHT22:
         return self.temperature
     
     def _detectBit(self):
-        print(" debug fonction _detectBit")
+        #print(" debug fonction _detectBit")
         cpt = 0
         while(cpt <= 80):
-            print(" debug fonction _detectBit While")
+            #print(" debug fonction _detectBit while")
             if (self.pin.value() != 1 and cpt == 25 or cpt == 27 or cpt == 28):
                 return 0
             elif(self.pin.value() != 1 and cpt == 69 or cpt == 70 or cpt == 71):
@@ -32,17 +32,18 @@ class DHT22:
             pyb.udelay(1)
             cpt += 1
     
-    def _transmit(self, delay, level, sequence):
-        print(" debug fonction _transmit")
+    def _transmit(self, level, sequence):
+        #print(" debug fonction _transmit")
         cpt = 0
-        while (cpt <= delay):
-            print(" debug fonction _while")
+        while (cpt <= 80):
+            #print(" debug fonction _transmit while")
             if (self.pin.value() < level):
                 raise ValueError("transmit error" + sequence)
             pyb.udelay(1)
+            cpt += 1
     
     def _initMeasure(self):
-        print(" debug fonction _initMeasure")
+        #print(" debug fonction _initMeasure")
         self.pin = pyb.Pin(self.pinName, pyb.Pin.OUT_PP)
         self.pin.low()
         pyb.delay(10)
@@ -51,11 +52,11 @@ class DHT22:
         self.pin = pyb.Pin(self.pinName, pyb.Pin.IN, pull=pyb.Pin.PULL_NONE)
     
     def measure(self):
-        print(" debug fonction measure")
+        #print(" debug fonction measure")
         negativeTemp = False
         self._initMeasure()
-        self._transmit(delay=80, level=0, sequence="sensor signal pull low")
-        self._transmit(delay=80, level=1, sequence="sensor signal pull high")
+        self._transmit(level=0, sequence="sensor signal pull low")
+        self._transmit(level=1, sequence="sensor signal pull high")
         for i in range(0, 39):
             tmp = self._detectBit
             if (tmp == -1):
@@ -82,7 +83,15 @@ class DHT22:
     
     def _byteDataToString(self, start, range=7):
         print(" debug fonction _byteDataToString")
-        for i in start(start, start + range):
+        tmp = None
+        for i in range(start, start + range):
+            ########## TODO debug
+            #Traceback (most recent call last):
+            #   File "main.py", line 13, in <module>
+            #   File "DHT22.py", line 66, in measure
+            #   File "DHT22.py", line 93, in _checkSum
+            #   File "DHT22.py", line 88, in _byteDataToString
+            # TypeError: unsupported types for __add__: 'NoneType', 'bound_method'
             tmp = tmp + self.data[i]
         return tmp
     

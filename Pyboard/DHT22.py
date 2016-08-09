@@ -19,25 +19,30 @@ class DHT22:
         return self.temperature
     
     def _detectBit(self):
+        print(" debug fonction _detectBit")
         cpt = 0
-        while(i <= 80):
-            if (self.pin.value() != 1 and i == 25 or i == 27 or i == 28):
+        while(cpt <= 80):
+            print(" debug fonction _detectBit While")
+            if (self.pin.value() != 1 and cpt == 25 or cpt == 27 or cpt == 28):
                 return 0
-            elif(self.pin.value() != 1 and i == 69 or i == 70 or i == 71):
+            elif(self.pin.value() != 1 and cpt == 69 or cpt == 70 or cpt == 71):
                 return 1
-            elif(self.pin.value() != 1 and i > 75):
+            elif(self.pin.value() != 1 and cpt > 75):
                 return -1
             pyb.udelay(1)
             cpt += 1
     
     def _transmit(self, delay, level, sequence):
+        print(" debug fonction _transmit")
         cpt = 0
         while (cpt <= delay):
+            print(" debug fonction _while")
             if (self.pin.value() < level):
                 raise ValueError("transmit error" + sequence)
             pyb.udelay(1)
     
     def _initMeasure(self):
+        print(" debug fonction _initMeasure")
         self.pin = pyb.Pin(self.pinName, pyb.Pin.OUT_PP)
         self.pin.low()
         pyb.delay(10)
@@ -46,7 +51,7 @@ class DHT22:
         self.pin = pyb.Pin(self.pinName, pyb.Pin.IN, pull=pyb.Pin.PULL_NONE)
     
     def measure(self):
-        
+        print(" debug fonction measure")
         negativeTemp = False
         self._initMeasure()
         self._transmit(delay=80, level=0, sequence="sensor signal pull low")
@@ -70,16 +75,19 @@ class DHT22:
         self.pin.high()
     
     def _convertBit(self, start, range):
+        print(" debug fonction _convertBit")
         tmp = self._byteDataToString(start=start, range=range)
         value = int(tmp, 2) / 10
         return value
     
     def _byteDataToString(self, start, range=7):
+        print(" debug fonction _byteDataToString")
         for i in start(start, start + range):
             tmp = tmp + self.data[i]
         return tmp
     
     def _checkSum(self):
+        print(" debug fonction _checkSum")
         a = self._byteDataToString(start=0)
         b = self._byteDataToString(start=8)
         c = self._byteDataToString(start=16)

@@ -2,7 +2,7 @@
 import pyb
 #from AM2302 import AM2302
 #from DHTSeries import DHTSeries as AM2302
-import DHT22
+import DHTSeries as DHT22
 # Turn blue LED on
 blueled=pyb.LED(4)
 blueled.on()

@@ -9,9 +9,9 @@ timer = None
 micros = None
 dhttype = 0  # 0=DHT11 1=DHT21/DHT22
 
-FALL_EDGES = 42  # we have 42 falling edges during data receive
+DATASIZE = 42  # we have 42 falling edges during data receive
 
-times = list(range(FALL_EDGES))
+times = list(range(DATASIZE))
 index = 0
 
 
@@ -22,7 +22,7 @@ def edge(line):
     global micros
     # print("edge callback")
     times[index] = micros.counter()
-    if index < (FALL_EDGES - 1):  # Avoid overflow of the buffer in case of any noise on the line
+    if index < (DATASIZE - 1):  # Avoid overflow of the buffer in case of any noise on the line
         index += 1
 
 
@@ -79,7 +79,7 @@ def process_data():
     i = 2  # We ignore the first two falling edges as it is a respomse on the start signal
     result_i = 0
     result = list([0, 0, 0, 0, 0])
-    while i < FALL_EDGES:
+    while i < DATASIZE:
         result[result_i] <<= 1
         if times[i] - times[i - 1] > 100:
             result[result_i] += 1
@@ -105,7 +105,7 @@ def process_data():
 
 def measure():
     do_measurement()
-    if index != (FALL_EDGES - 1):
+    if index != (DATASIZE - 1):
         raise ValueError('Data transfer failed: %s falling edges only' % str(index))
     return process_data()
     

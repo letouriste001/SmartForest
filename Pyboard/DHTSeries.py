@@ -50,7 +50,7 @@ def init(timer_id=2, data_pin='Y2', the_dhttype='DHT22'):
 
 
 # Start signal
-def do_measurement():
+def _do_measurement():
     global data
     global micros
     global index
@@ -72,7 +72,7 @@ def do_measurement():
 
 
 # Parse the data read from the sensor
-def process_data():
+def _process_data():
     global dhttype
     global times
     
@@ -104,10 +104,10 @@ def process_data():
 
 
 def measure():
-    do_measurement()
+    _do_measurement()
     if index != (DATASIZE - 1):
         raise ValueError('Data transfer failed: %s falling edges only' % str(index))
-    return process_data()
+    return _process_data()
     
     # using:
     # import DHT22

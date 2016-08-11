@@ -16,7 +16,7 @@ index = 0
 
 
 # The interrupt handler
-def interuptHandler(line):
+def _interuptHandler(line):
     global index
     global times
     global micros
@@ -44,7 +44,7 @@ def init(timer_id=2, data_pin='Y2', the_dhttype='DHT22'):
     micros = pyb.Timer(timer, prescaler=83, period=0x3fffffff)  # 1MHz ~ 1uS
     # Prepare interrupt handler
     ExtInt(data, ExtInt.IRQ_FALLING, Pin.PULL_UP, None)
-    ExtInt(data, ExtInt.IRQ_FALLING, Pin.PULL_UP, interuptHandler)
+    ExtInt(data, ExtInt.IRQ_FALLING, Pin.PULL_UP, _interuptHandler)
     data.high()
     pyb.delay(250)
 

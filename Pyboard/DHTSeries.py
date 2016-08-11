@@ -4,7 +4,7 @@ from pyb import ExtInt
 
 # We need to use global properties here as any allocation of a memory (aka declaration of a variable)
 # during the read cycle causes non-acceptable delay and we are loosing data than
-data = None
+_dataDHT = None
 timer = None
 micros = None
 dhttype = 0  # 0=DHT11 1=DHT21/DHT22
@@ -27,7 +27,7 @@ def _interuptHandler(line):
 
 
 def init(timer_id=2, data_pin='Y2', the_dhttype='DHT22'):
-    global data
+    global _dataDHT
     global micros
     global timer
     global dhttype
@@ -37,36 +37,36 @@ def init(timer_id=2, data_pin='Y2', the_dhttype='DHT22'):
     else:
         dhttype = 1
     # Configure the pid for data communication
-    data = Pin(data_pin)
+    _dataDHT = Pin(data_pin)
     # Save the ID of the timer we are going to use
-    timer = timer_id
+    _dataDHT = timer_id
     # setup the 1uS timer
     micros = pyb.Timer(timer, prescaler=83, period=0x3fffffff)  # 1MHz ~ 1uS
     # Prepare interrupt handler
-    ExtInt(data, ExtInt.IRQ_FALLING, Pin.PULL_UP, None)
-    ExtInt(data, ExtInt.IRQ_FALLING, Pin.PULL_UP, _interuptHandler)
-    data.high()
+    ExtInt(_dataDHT, ExtInt.IRQ_FALLING, Pin.PULL_UP, None)
+    ExtInt(_dataDHT, ExtInt.IRQ_FALLING, Pin.PULL_UP, _interuptHandler)
+    _dataDHT.high()
     pyb.delay(250)
 
 
 # Start signal
 def _do_measurement():
-    global data
+    global _dataDHT
     global micros
     global index
     # Send the START signal
-    data.init(Pin.OUT_PP)
-    data.low()
+    _dataDHT.init(Pin.OUT_PP)
+    _dataDHT.low()
     micros.counter(0)
     while micros.counter() < 20000:
         pass
-    data.high()
+    _dataDHT.high()
     micros.counter(0)
     while micros.counter() < 30:
         pass
     # Activate reading on the data pin
     index = 0
-    data.init(Pin.IN, Pin.PULL_UP)
+    _dataDHT.init(Pin.IN, Pin.PULL_UP)
     # Till 5mS the measurement must be over
     pyb.delay(10)
 

@@ -1,19 +1,24 @@
 # main.py -- put your code here!
 import pyb
-from DHT22 import DHT22
-
+#from AM2302 import AM2302
+#from DHTSeries import DHTSeries as AM2302
+import DHT22
 # Turn blue LED on
 blueled=pyb.LED(4)
 blueled.on()
 
 print("demarage du programe de test")
 
-dht22 = DHT22("X1")
+# am2302 = AM2302()
+#
+# while True:
+#     (hum, tem) = am2302.measure()
+#     print("humidité : " + str(hum) + " temperature : " + str(tem))
 
-dht22.measure()
+DHT22.init()
+pyb.delay(3000)
 
-humidity = dht22.getHumidity()
-temperature = dht22.getTemperature()
-
-print("humidite : " + humidity)
-print("temperature : " + temperature)
+while True:
+    (hum, tem) = DHT22.measure()
+    print("humidité : " + str(hum) + " temperature : " + str(tem))
+    pyb.delay(3000)

@@ -20,7 +20,7 @@ def edge(line):
     global index
     global times
     global micros
-    #print("edge callback")
+    # print("edge callback")
     times[index] = micros.counter()
     if index < (FALL_EDGES - 1):  # Avoid overflow of the buffer in case of any noise on the line
         index += 1
@@ -47,7 +47,8 @@ def init(timer_id=2, data_pin='Y2', the_dhttype='DHT22'):
     ExtInt(data, ExtInt.IRQ_FALLING, Pin.PULL_UP, edge)
     data.high()
     pyb.delay(250)
-    
+
+
 # Start signal
 def do_measurement():
     global data
@@ -74,7 +75,6 @@ def do_measurement():
 def process_data():
     global dhttype
     global times
-    
     
     i = 2  # We ignore the first two falling edges as it is a respomse on the start signal
     result_i = 0
@@ -108,7 +108,7 @@ def measure():
     if index != (FALL_EDGES - 1):
         raise ValueError('Data transfer failed: %s falling edges only' % str(index))
     return process_data()
-
+    
     # using:
     # import DHT22
     # DHT22.init()
